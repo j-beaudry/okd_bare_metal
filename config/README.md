@@ -6,11 +6,11 @@ The OpenShift (OKD) is a distribution of Kubernetes optimized for continuous app
 
 The **purpose of this roadmap is to install a Private Cloud on a private server ("bare-metal")**, that is, on an User Provisioned Infrastructure (UPI). This Private Cloud will be all provided by OKD which, basically, is the **open and free community version of OpenShift**. Several additional features like Prometheus, Grafana and an Alert Manager will be available out of the box. **Cool, isn't it?** 😎
 
-[Ref(s).: https://www.okd.io/#v4 , 
-https://docs.okd.io/4.9/monitoring/accessing-third-party-uis.html , 
-https://thanos.io/tip/components/query.md/ , 
-https://grafana.com/ , 
-https://prometheus.io/ , 
+[Ref(s).: https://www.okd.io/#v4 ,
+https://docs.okd.io/4.9/monitoring/accessing-third-party-uis.html ,
+https://thanos.io/tip/components/query.md/ ,
+https://grafana.com/ ,
+https://prometheus.io/ ,
 https://docs.okd.io/latest/monitoring/managing-alerts.html ]
 
 **IMPORTANT:** My life, my work and my passion is free software. We've come across people from Red Hat themselves using this roadmap to build infrastructure with Openshift (OKD). Corrections, tweaks and improvements are very welcome (**pull requests** 😉)! Please consider giving us a ⭐, fork, support this project or even visit our professional profile (see [About](#about)). **Thanks!** 🤗
@@ -251,7 +251,7 @@ Hardware requirements and other information...
 [Ref(s).: https://www.alt-codes.net/arrow_alt_codes.php ]
 
 **NOTES:**
- 1. The N_INT_LAN is (normally) also the "default" network and N_OKD_LAN is also the "okd_network" network; 
+ 1. The N_INT_LAN is (normally) also the "default" network and N_OKD_LAN is also the "okd_network" network;
  2. The N_INT_LAN is (normally) a NAT network with communication with the internet (WAN) and the hypervisor (host);
  3. The N_OKD_LAN is a private/isolated network without communication with the internet (WAN) and the hypervisor (host). All external communication will be done through the gateway established in the OKD_SERVICES via the network N_INT_LAN.
 
@@ -1176,8 +1176,8 @@ coreos.inst.install_dev=/dev/vda coreos.inst.image_url=http://10.3.0.3:8080/okd/
 **IMPORTANT:** It is normal that at the beginning a master node continuously display an error like to the following...
 
 ```
-[   83.933709] ignition[531]: GET https://api-int.mbr.domain.abc:22623/config/master: attempt #16
-[   83.939340] ignition[531]: GET error: Get "https://api-int.mbr.domain.abc:22623/config/master": EOF
+[   83.933709] ignition[531]: GET https://api-int.<OKD_SUBDOMAIN>.domain.abc:22623/config/master: attempt #16
+[   83.939340] ignition[531]: GET error: Get "https://api-int.<OKD_SUBDOMAIN>.domain.abc:22623/config/master": EOF
 ```
 
 ... , however with the bootstrap node (OKD_BOOTSTRAP) running (after passing the ignition phase) the above situation MUST NOT EXTEND FOR MORE THAN 10 MINUTES. If you exceed this amount of time, something has certainly gone wrong.
@@ -1203,7 +1203,7 @@ coreos.inst.install_dev=/dev/vda coreos.inst.image_url=http://10.3.0.3:8080/okd/
 **IMPORTANT:** It is normal that at the beginning a worker node continuously display an error like to the following...
 
 ```
-[  139.524957] ignition[532]: GET https://api-int.mbr.domain.abc:22623/config/worker: attempt #31
+[  139.524957] ignition[532]: GET https://api-int.<OKD_SUBDOMAIN>.domain.abc:22623/config/worker: attempt #31
 [  139.528886] ignition[532]: GET result: Internal Server Error
 ```
 
@@ -1242,7 +1242,7 @@ journalctl -b -f -u release-image.service -u bootkube.service
 
 ```
 [...]
-INFO Waiting up to 20m0s for the Kubernetes API at https://api.mbr.domain.abc:6443...
+INFO Waiting up to 20m0s for the Kubernetes API at https://api.<OKD_SUBDOMAIN>.domain.abc:6443...
 INFO API v1.20.0-1077+2817867655bb7b-dirty up
 INFO Waiting up to 30m0s for bootstrapping to complete...
 INFO It is now safe to remove the bootstrap resources
@@ -1353,7 +1353,7 @@ systemctl stop httpd.service
 systemctl disable httpd.service
 ```
 
-### Remove the bootstrap node 
+### Remove the bootstrap node
 
 Comment out the bootstrap node and restart the HAProxy (load balancer) service (OKD_SERVICES)...
 
@@ -1842,13 +1842,13 @@ Test whether the web console is available...
 MODEL
 
 ```
-curl -k https://console-openshift-console.apps.mbr.<YOUR_DOMAIN>
+curl -k https://console-openshift-console.apps.<OKD_SUBDOMAIN>.<YOUR_DOMAIN>
 ```
 
 EXAMPLE
 
 ```
-curl -k https://console-openshift-console.apps.mbr.domain.abc
+curl -k https://console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
 --------
@@ -1856,8 +1856,8 @@ curl -k https://console-openshift-console.apps.mbr.domain.abc
 **NOTE:** The Web Console may take a few minutes to become available. It is normal for the above command to initially display an error like below...
 
 ```
-[root@okd-services ~]# curl -k https://console-openshift-console.apps.mbr.domain.abc
-curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to console-openshift-console.apps.mbr.domain.abc:443
+[root@okd-services ~]# curl -k https://console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc
+curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc:443
 ```
 
 ... or an error like below...
@@ -1883,7 +1883,7 @@ oc get routes --all-namespaces
 From your desktop browser, test access to the Web Console using an URL like this example...
 
 ```
-https://console-openshift-console.apps.mbr.domain.abc
+https://console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
 ... and on the first login screen use the "htpasswd_provider" option and then the username and password created in the "HTPasswd Setup (OKD_SERVICES)" section.
@@ -1895,7 +1895,7 @@ https://console-openshift-console.apps.mbr.domain.abc
 Add an entry as this example...
 
 ```
-127.0.0.1 alertmanager-main-openshift-monitoring.apps.mbr.domain.abc canary-openshift-ingress-canary.apps.mbr.domain.abc console-openshift-console.apps.mbr.domain.abc downloads-openshift-console.apps.mbr.domain.abc grafana-openshift-monitoring.apps.mbr.domain.abc oauth-openshift.apps.mbr.domain.abc prometheus-k8s-openshift-monitoring.apps.mbr.domain.abc thanos-querier-openshift-monitoring.apps.mbr.domain.abc wordpress-wordpress-test.apps.mbr.domain.abc
+127.0.0.1 alertmanager-main-openshift-monitoring.apps.<OKD_SUBDOMAIN>.domain.abc canary-openshift-ingress-canary.apps.<OKD_SUBDOMAIN>.domain.abc console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc downloads-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc grafana-openshift-monitoring.apps.<OKD_SUBDOMAIN>.domain.abc oauth-openshift.apps.<OKD_SUBDOMAIN>.domain.abc prometheus-k8s-openshift-monitoring.apps.<OKD_SUBDOMAIN>.domain.abc thanos-querier-openshift-monitoring.apps.<OKD_SUBDOMAIN>.domain.abc wordpress-wordpress-test.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
 ... in your...
@@ -2223,16 +2223,16 @@ Create an "A" wildcard record in your DNS (external) as below...
 MODEL
 
 ```
-*.apps.mbr.<YOUR_DOMAIN>
+*.apps.<OKD_SUBDOMAIN>.<YOUR_DOMAIN>
 ```
 
 EXAMPLE
 
 ```
-*.apps.mbr.domain.abc
+*.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
-**NOTE:** In our DNS (external) we had to look for the section where "Type A" appears. Then we entered "*.apps.mbr.domain.abc" for "Entry" and our internet IP for "Value". This will vary according to each reality.
+**NOTE:** In our DNS (external) we had to look for the section where "Type A" appears. Then we entered "*.apps.<OKD_SUBDOMAIN>.domain.abc" for "Entry" and our internet IP for "Value". This will vary according to each reality.
 
  ## Install the packages...
 
@@ -2252,7 +2252,7 @@ certbot certonly \
     --email <YOUR_ADMIN_EMAIL> \
     --manual \
     --preferred-challenges=dns \
-    -d *.apps.mbr.<YOUR_DOMAIN> \
+    -d *.apps.<OKD_SUBDOMAIN>.<YOUR_DOMAIN> \
     --server https://acme-v02.api.letsencrypt.org/directory
 ```
 
@@ -2264,7 +2264,7 @@ certbot certonly \
     --email admin@anydomain.any \
     --manual \
     --preferred-challenges=dns \
-    -d *.apps.mbr.domain.abc \
+    -d *.apps.<OKD_SUBDOMAIN>.domain.abc \
     --server https://acme-v02.api.letsencrypt.org/directory
 ```
 
@@ -2274,7 +2274,7 @@ You will receive a "TXT" record which you need to add to your DNS (external) ser
 [...]
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Please deploy a DNS TXT record under the name
-_acme-challenge.apps.mbr.domain.abc with the following value:
+_acme-challenge.apps.<OKD_SUBDOMAIN>.domain.abc with the following value:
 
 dL2prHMK152EdcZkcvUA18rsqCJihKoBIkXxyMK3VH5
 
@@ -2284,7 +2284,7 @@ Press Enter to Continue
 [...]
 ```
 
-**NOTE:** In our DNS (external) we had to look for the section where the "Type TXT" appears. Then we entered "_acme-challenge.apps.mbr.domain.abc" for "Entry" and "dL2prHMK152EdcZkcvUA18rsqCJihKoBIkXxyMK3VH5" for "Value". This will vary according to each reality.
+**NOTE:** In our DNS (external) we had to look for the section where the "Type TXT" appears. Then we entered "_acme-challenge.apps.<OKD_SUBDOMAIN>.domain.abc" for "Entry" and "dL2prHMK152EdcZkcvUA18rsqCJihKoBIkXxyMK3VH5" for "Value". This will vary according to each reality.
 
 Once the record has been deployed, press Enter to obtain the certificate. You should get a feedback like below...
 
@@ -2295,9 +2295,9 @@ Cleaning up challenges
 
 IMPORTANT NOTES:
  - Congratulations! Your certificate and chain have been saved at:
-   /etc/letsencrypt/live/apps.mbr.domain.abc/fullchain.pem
+   /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.domain.abc/fullchain.pem
    Your key file has been saved at:
-   /etc/letsencrypt/live/apps.mbr.domain.abc/privkey.pem
+   /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.domain.abc/privkey.pem
    Your certificate will expire on 2021-10-19. To obtain a new or
    tweaked version of this certificate in the future, simply run
    certbot again. To non-interactively renew *all* of your
@@ -2313,13 +2313,13 @@ Your new certificates will be in the folder...
 MODEL
 
 ```
-ls /etc/letsencrypt/live/apps.mbr.<YOUR_DOMAIN>
+ls /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.<YOUR_DOMAIN>
 ```
 
 EXAMPLE
 
 ```
-ls /etc/letsencrypt/live/apps.mbr.domain.abc
+ls /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
 ## Add a job (crontab) to renew the certificate (NGINX_REVERSE_PROXY)
@@ -2395,9 +2395,9 @@ NGINX_RP_S_AVAL_PATH="/etc/nginx/sites-available"
 read -r -d '' FILE_CONTENT << HEREDOC
 BEGIN
 server {
-    access_log /var/log/nginx/apps.mbr.$OKD_DOMAIN-ssl-access.log;
-    error_log /var/log/nginx/apps.mbr.$OKD_DOMAIN-ssl-error.log;
-    server_name *.apps.mbr.$OKD_DOMAIN;
+    access_log /var/log/nginx/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN-ssl-access.log;
+    error_log /var/log/nginx/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN-ssl-error.log;
+    server_name *.apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN;
 
     location / {
         proxy_pass https://$INT_LAN_24.$OKD_SERVICES_IL_LST_OCT:443;
@@ -2409,16 +2409,16 @@ server {
     }
 
     listen 443;
-    ssl_certificate /etc/letsencrypt/live/apps.mbr.$OKD_DOMAIN/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/apps.mbr.$OKD_DOMAIN/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 }
 
 server {
-    access_log /var/log/nginx/apps.mbr.$OKD_DOMAIN-access.log;
-    error_log /var/log/nginx/apps.mbr.$OKD_DOMAIN-error.log;
-    server_name ~^(?<subdomain>[^.]+).apps.mbr.$OKD_DOMAIN;
+    access_log /var/log/nginx/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN-access.log;
+    error_log /var/log/nginx/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN-error.log;
+    server_name ~^(?<subdomain>[^.]+).apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN;
 
     # Redirect HTTP routes to OpenShift (OKD) subdomains (routes) known as HTTPS.
     if (\$subdomain = "\\
@@ -2450,13 +2450,13 @@ server {
 
 END
 HEREDOC
-echo -n "${FILE_CONTENT:6:-3}" > "$NGINX_RP_S_AVAL_PATH/apps.mbr.$OKD_DOMAIN"
+echo -n "${FILE_CONTENT:6:-3}" > "$NGINX_RP_S_AVAL_PATH/apps.<OKD_SUBDOMAIN>.$OKD_DOMAIN"
 
 # < -------------------
 ```
 
 **NOTES:**
-1. Note that the most important configuration item above is `proxy_ssl_name $host;`, without it the "oauth-openshift.apps.mbr.<YOUR_DOMAIN>" route will not work;
+1. Note that the most important configuration item above is `proxy_ssl_name $host;`, without it the "oauth-openshift.apps.<OKD_SUBDOMAIN>.<YOUR_DOMAIN>" route will not work;
 2. There are different ways to maintain and organize settings for an Nginx reverse proxy. Our approach uses the "sites-available/sites-enabled" scheme and symbolic links.
 
 [Ref(s).: https://stackoverflow.com/q/68538099/3223785 ]
@@ -2473,14 +2473,14 @@ journalctl -u nginx.service --no-pager | less +F
 **TIP:** If the DNS (external) configuration with wildcard is correct, any subdomain should get an answer according to the examples below. To test perform these commands on your desktop...
 
 ```
-ping -c 2 any.apps.mbr.domain.abc
-ping -c 2 other.apps.mbr.domain.abc
-ping -c 2 subdomain.apps.mbr.domain.abc
-ping -c 2 that.apps.mbr.domain.abc
-ping -c 2 exists.apps.mbr.domain.abc
-ping -c 2 for.apps.mbr.domain.abc
-ping -c 2 your.apps.mbr.domain.abc
-ping -c 2 domain.apps.mbr.domain.abc
+ping -c 2 any.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 other.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 subdomain.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 that.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 exists.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 for.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 your.apps.<OKD_SUBDOMAIN>.domain.abc
+ping -c 2 domain.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 .
 
@@ -2656,7 +2656,7 @@ oc adm policy add-cluster-role-to-user cluster-admin myusruid
 From your desktop browser, test access to the Web Console using an URL like this example...
 
 ```
-https://console-openshift-console.apps.mbr.domain.abc
+https://console-openshift-console.apps.<OKD_SUBDOMAIN>.domain.abc
 ```
 
 ... and on the first login screen use the "ldapidp" option and then an OpenLDAP (LDAP) user and password.
@@ -2689,9 +2689,9 @@ This solution implies losing resources linked to the deleted user. Then assess w
 
 # About
 
-okd_bare_metal 🄯 BSD-3-Clause  
-Eduardo Lúcio Amorim Costa  
-Brazil-DF  
+okd_bare_metal 🄯 BSD-3-Clause
+Eduardo Lúcio Amorim Costa
+Brazil-DF
 https://www.linkedin.com/in/eduardo-software-livre/
 
 ![Brazil](./images/brazil.png)

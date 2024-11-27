@@ -1,7 +1,7 @@
 apiVersion: v1
 baseDomain: <OKD_DOMAIN>
 metadata:
-  name: mbr
+  name: <OKD_SUBDOMAIN>
 
 compute:
 - hyperthreading: Enabled

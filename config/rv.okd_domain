@@ -1,0 +1,24 @@
+$TTL 604800
+@ IN SOA okd-services.<OKD_DOMAIN>. admin.<OKD_DOMAIN>. (
+    6       ; Serial
+    604800  ; Refresh
+    86400   ; Retry
+    2419200 ; Expire
+    604800  ; Negative Cache TTL
+)
+
+; Name servers - "NS" records.
+ IN NS okd-services.<OKD_DOMAIN>.
+
+; Name servers - "PTR" records.
+<OKD_SERVICES_LST_OCT> IN PTR okd-services.<OKD_DOMAIN>.
+
+; OpenShift container platform cluster - "PTR" records.
+<OKD_BOOTSTRAP_LST_OCT> IN PTR okd-bootstrap.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_MASTER_1_LST_OCT> IN PTR okd-master-1.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_MASTER_2_LST_OCT> IN PTR okd-master-2.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_MASTER_3_LST_OCT> IN PTR okd-master-3.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_WORKER_1_LST_OCT> IN PTR okd-worker-1.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_WORKER_2_LST_OCT> IN PTR okd-worker-2.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_SERVICES_LST_OCT> IN PTR api.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
+<OKD_SERVICES_LST_OCT> IN PTR api-int.<OKD_SUBDOMAIN>.<OKD_DOMAIN>.
