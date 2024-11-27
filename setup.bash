@@ -19,6 +19,7 @@ cp -R $FOLDER_CONFIG/* $FOLDER_BACKUP
 # File ./install-config.yaml
 f_ez_sed "<OKD_DOMAIN>" "$OKD_DOMAIN" "$FOLDER_CONFIG/install-config.yaml" 1
 f_ez_sed "<OKD_SUBDOMAIN>" "$OKD_SUBDOMAIN" "$FOLDER_CONFIG/install-config.yaml" 1
+f_ez_sed "<SSH_PUB_KEY>" "$SSH_KEY" "$FOLDER_CONFIG/install-config.yaml" 1
 
 # File ./registry_pv.yaml
 f_ez_sed "<OKD_LAN_24>" "$OKD_LAN_24" "$FOLDER_CONFIG/registry_pv.yaml" 1
