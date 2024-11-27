@@ -3,6 +3,6 @@ source .env
 
 echo "Reverting changes"
 
-rm -rf config
+rm -rf $FOLDER_CONFIG
 
-cp -R backup config
+cp -R $FOLDER_BACKUP $FOLDER_CONFIG
