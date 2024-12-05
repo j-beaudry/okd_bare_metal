@@ -26,5 +26,5 @@ platform:
 
 fips: false
 
-pullSecret: '{"auths":{"fake":{"auth": "bar"}}}'
+pullSecret: '{"auths":{"fake":{"auth": ""}}}'
 sshKey: '<SSH_PUB_KEY>'
